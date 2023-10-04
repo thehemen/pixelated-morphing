@@ -111,7 +111,12 @@ class ImageMorphing:
         self.align_width = align_width
 
     def get_morphed_image(self, alpha=0.5, threshold=0.5):
-        """Get a morphed image."""
+        """Get a morphed image.
+
+        Keyword arguments:
+        alpha -- an alpha value of the image blending
+        threshold -- a threshold value to keep the missing image areas
+        """
         img = ImageMorphed(self.height, self.width, self.channels)
 
         for class_name in classes:
@@ -156,7 +161,15 @@ class ImageMorphing:
         return img.img
 
     def __add_image(self, img, region_1, region_2, morphingState):
-        """Add two image regions."""
+        """Add two image regions.
+
+        Keyword arguments:
+        img -- a morphed image
+        region_1 -- the first image region
+        region_2 -- the second image region
+        morphingState -- a current morphing state
+        """
+        # Get current morphing values.
         align_width, class_name, alpha, pair_index = morphingState.get_values()
 
         img1 = region_1.image_area
@@ -165,40 +178,61 @@ class ImageMorphing:
         dependencies_1 = region_1.dependencies
         dependencies_2 = region_2.dependencies
 
+        # Get x and y values by their weighted mean.
         x = self.__get_values(region_1.bbox, region_2.bbox, alpha, 'x', 'width')
         y = self.__get_values(region_1.bbox, region_2.bbox, alpha, 'y', 'height')
 
+        # Get a bounding box by using center alignment.
         vals = {**x, **y}
         c_bbox = CenterBoundingBox(vals['x_center'], vals['y_center'], vals['width'], vals['height'])
         bbox = c_bbox.get_init_bbox()
 
+        # Get dependencies common for both image regions.
         dependencies = self.__get_common_dependencies(dependencies_1, dependencies_2)
 
         if dependencies:
+            # Adjust a bounding box by dependencies, if they exist.
             bbox = self.__adjust_by_dependencies(bbox, dependencies, img.bboxes)
 
             if pair_index:
+                # Adjust a spacing width, if the image region is a paired one.
                 bbox = self.__adjust_spacing_width(bbox, region_1.bbox, region_2.bbox, alpha, pair_index)
 
+        # Align a bounding box by the meta-pixel's width.
         bbox = self.__align_by_value(bbox, align_width)
 
+        # Add two images by the alpha value.
         width, height = bbox.width, bbox.height
         img_new = add_images(img1, img2, alpha, width, height)
 
+        # Add an image region to the resulting image.
         x1, y1 = bbox.x1, bbox.y1
         img_area_new = add_alpha_images(img.img[y1: y1 + height, x1: x1 + width], img_new)
         img.img[y1: y1 + height, x1: x1 + width] = img_area_new
 
+        # Define a class name.
         if not pair_index:
             class_name_now = class_name
         else:
             class_name_now = f'{class_name}_{pair_index}'
 
+        # Add a bounding box to the morphed image.
         img.bboxes[class_name_now] = bbox
+
+        # Return a morphed image.
         return img
 
     def __add_image_with_gap(self, img, im_region, head_bbox_init, head_img, morphingState):
-        """Add two image regions when one is skipped."""
+        """Add two image regions when one is skipped.
+        The first image's region is used, so the second image's region is skipped.
+
+        Keyword arguments:
+        img -- a morphed image
+        im_region -- an image region
+        head_bbox_init -- a bounding box of the first image's Head region
+        head_img -- an image of the second image's Head region
+        """
+        # Get current morphing values.
         align_width, class_name, alpha, pair_index = morphingState.get_values()
 
         img_area = im_region.image_area
@@ -207,51 +241,66 @@ class ImageMorphing:
         dependencies = im_region.dependencies
         head_bbox_upd = img.bboxes['Head']
 
+        # Move a bounding box the same way as the morphed image's bounding box is moved.
         bbox = bbox.to_relative(head_bbox_init)
         bbox = bbox.to_absolute(head_bbox_upd)
 
         if dependencies:
+            # Adjust a bounding box by dependencies, if they exist.
             bbox = self.__adjust_by_dependencies(bbox, dependencies, img.bboxes)
 
         if class_name == 'Hair':
+            # If the class is Hair, crop it as defined.
             img_area, bbox = self.__get_hair_image(img_area, bbox, alpha)
         elif class_name == 'Helmet':
+            # Otherwise, if the class is Helmet, crop it as defined too.
             img_area, bbox = self.__get_helmet_image(img_area, bbox, alpha)
 
+        # If the height is zero, return to the image morphing.
         if img_area.shape[0] == 0:
             return img
 
+        # Align a bounding box by the meta-pixel's width.
         bbox = self.__align_by_value(bbox, align_width)
+        # Fix a bounding box shape by applying the size bounds.
         bbox = self.__apply_bounds(bbox)
 
         x1, y1 = bbox.x1, bbox.y1
         width, height = bbox.width, bbox.height
 
+        # If width or height is zero, return to the image morphing.
         if np.any(np.array([width, height]) <= 0):
             return img
 
         img_new = cv2.resize(img_area, (width, height))
         head_img = cv2.resize(head_img, (width, height))
 
+        # Apply a color transfer from the second image's Head region to this region.
         c_img_new = img_new.copy()
         c_img_new[:, :, :3] = get_color_transfer(head_img, c_img_new)
 
+        # Add two images by the half of the alpha value.
         c_alpha = 1.0 - alpha * 2.0
         img_new = add_images(img_new, c_img_new, c_alpha, width, height)
 
+        # Add an image region to the resulting image.
         img_area_new = add_alpha_images(img.img[y1: y1 + height, x1: x1 + width], img_new)
         img.img[y1: y1 + height, x1: x1 + width] = img_area_new
 
+        # Define a class name.
         if not pair_index:
             class_name_now = class_name
         else:
             class_name_now = f'{class_name}_{pair_index}'
 
+        # Add a bounding box to the morphed image.
         img.bboxes[class_name_now] = bbox
+
+        # Return a morphed image.
         return img
 
     def __get_hair_image(self, img, bbox, alpha):
-        """Get a hair image."""
+        """Get a hair image cropping it by height."""
         all_cell_num = int(bbox.height / self.cell_size)
         cell_num = int(round(all_cell_num * alpha))
 
@@ -262,7 +311,7 @@ class ImageMorphing:
         return img, bbox
 
     def __get_helmet_image(self, img, bbox, alpha):
-        """Get a helmet image."""
+        """Get a helmet image cropping it by height."""
         helmet_skull = img[:self.half_width, :, :]
         helmet_ears = img[self.half_width:, :, :]
 
@@ -304,7 +353,7 @@ class ImageMorphing:
         return dependencies
 
     def __adjust_by_dependencies(self, bbox, dependencies, bboxes):
-        """Adjust a bounding box by dependencies."""
+        """Adjust a bounding box by dependencies and other bounding boxes."""
         skipped_bbox = SkippedBoundingBox()
 
         for dependency_name, value_pairs in dependencies.items():
@@ -329,7 +378,7 @@ class ImageMorphing:
         return bbox
 
     def __apply_bounds(self, bbox):
-        """Apply the width and height bounds to the bounding box."""
+        """Apply width and height bounds to the bounding box."""
         bbox.x1 = max(0, bbox.x1)
         bbox.width = min(bbox.x2, self.width - 1) - bbox.x1
 
@@ -342,14 +391,18 @@ class ImageMorphing:
         values = bbox.get_values()
 
         for key, value in values.items():
+            # Check is a value in the second half of the image.
             is_reversed = value > self.half_width
 
             if is_reversed:
+                # If so, move it to the first half.
                 value = to_first_half(value, self.half_width)
 
+            # Round a value by the meta-pixel's width.
             value = x_round(value, align_width)
 
             if is_reversed:
+                # If so, move it to the second half.
                 value = to_second_half(value, self.half_width)
 
             values[key] = value
@@ -360,7 +413,9 @@ class ImageMorphing:
         width = max(values['x2'] - x1, align_width)
         height = max(values['y2'] - y1, align_width)
 
+        # Create a bounding box by the aligned values.
         bbox = BoundingBox(x1, y1, width, height)
+        # Return an aligned bounding box.
         return bbox
 
     def __is_all(self, class_name):
