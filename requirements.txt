@@ -1,0 +1,7 @@
+tqdm
+glob
+numpy
+joblib
+opencv-python
+scikit-image
+dearpygui
