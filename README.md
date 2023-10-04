@@ -7,6 +7,12 @@ A visual description of the process is presented on [Medium](https://medium.com/
 
 As a baseline, a set of 16 images similar to [Minecraft's ones](https://minecraft.fandom.com/wiki/Minecraft_Wiki) are used.
 
+To run this algorithm, you need to install requirements:
+
+```sh
+pip install -r requirements.txt
+```
+
 First, you need to get aligned versions of initial images:
 
 ```sh
