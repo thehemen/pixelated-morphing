@@ -1,63 +1,88 @@
 {
-    "Armorer":
-    [
-        "ArmorerFace"
-    ],
-    "Bat":
-    [
-        "BatFace"
-    ],
-    "Daemon":
-    [
-        "DaemonFace"
-    ],
-    "DarkCreeper":
-    [
-        "DarkCreeperFace"
-    ],
-    "Fox":
-    [
-        "FoxFace"
-    ],
-    "Ghost":
-    [
-        "GhostFace"
-    ],
-    "Cow":
-    [
-        "HeatCowFace",
-        "IcyCowFace"
-    ],
-    "LightCreeper":
-    [
-        "LightCreeperFace"
-    ],
-    "Pig":
-    [
-        "PigFace"
-    ],
-    "Rabbit":
-    [
-        "RabbitFace"
-    ],
-    "Skeleton":
-    [
-        "SkeletonFace"
-    ],
-    "Smile":
-    [
-        "SmileFace"
-    ],
-    "Strong":
-    [
-        "StrongFace"
-    ],
-    "Villager":
-    [
-        "VillagerFace"
-    ],
-    "Weasel":
-    [
-        "WeaselFace"
-    ]
+    "AquaFace": ["AquaFace", "BoneFace", "GhoulFace"],
+    "ArmorerFace": ["ArmorerFace"],
+    "AzureFace": ["AzureFace"],
+    "BatFace": ["BansheeFace", "BatFace", "VerdantFace"],
+    "BlazeFace": ["BlazeFace"],
+    "BlizzardFace": ["BlizzardFace"],
+    "BlossomFace": ["BlossomFace", "SkeletonFace"],
+    "BumbleFace": ["BumbleFace"],
+    "CharcoalFace": ["CharcoalFace"],
+    "ClayFace": ["ClayFace"],
+    "CloudFace": ["CloudFace"],
+    "CrimsonFace": ["CrimsonFace"],
+    "DaemonFace": ["DaemonFace"],
+    "CreeperFace": ["DarkCreeperFace", "LightCreeperFace"],
+    "DruidFace": ["DruidFace"],
+    "DuskFace": ["DuskFace"],
+    "EmberFace": ["EmberFace"],
+    "EmeraldFace": ["EmeraldFace"],
+    "EnigmaFace": ["EnigmaFace"],
+    "FesterFace": ["FesterFace"],
+    "FleckFace": ["FleckFace"],
+    "FlintFace": ["FlintFace"],
+    "ForestFace": ["ForestFace"],
+    "FoxFace": ["FoxFace"],
+    "FrostFace": ["FrostFace"],
+    "CowFace": ["FrostyCowFace", "HeatCowFace", "IcyCowFace", "RustyCowFace"],
+    "GhostFace": ["GhostFace"],
+    "GingerFace": ["GingerFace"],
+    "GlacierFace": ["GlacierFace"],
+    "GlaucusFace": ["GlaucusFace"],
+    "GleamFace": ["GleamFace"],
+    "GleefulFace": ["GleefulFace"],
+    "GlitchFace": ["GlitchFace"],
+    "GlowFace": ["GlowFace"],
+    "GoblinFace": ["GoblinFace"],
+    "GrimmFace": ["GrimmFace"],
+    "GrimstoneFace": ["GrimstoneFace"],
+    "HoneybeeFace": ["HoneybeeFace"],
+    "IceflowFace": ["IceflowFace"],
+    "InfernoFace": ["InfernoFace"],
+    "JadeFace": ["JadeFace"],
+    "JesterFace": ["JesterFace"],
+    "JiggleFace": ["JiggleFace", "NimbusFace"],
+    "LeafFace": ["LeafFace"],
+    "LuminFace": ["LuminFace"],
+    "MagmaFace": ["MagmaFace"],
+    "MistFace": ["MistFace"],
+    "MittenFace": ["MittenFace"],
+    "MossbeardFace": ["MossbeardFace"],
+    "MystiqueFace": ["MystiqueFace"],
+    "NightshadeFace": ["NightshadeFace"],
+    "NocturneFace": ["NocturneFace"],
+    "OgreFace": ["OgreFace"],
+    "OracleFace": ["OracleFace"],
+    "PhantomFace": ["PhantomFace"],
+    "PhoenixFace": ["PhoenixFace"],
+    "PigFace": ["PickleFace", "PigFace"],
+    "PurpleFace": ["PurpleFace"],
+    "RabbitFace": ["FrostbiteFace", "RabbitFace"],
+    "RavenFace": ["RavenFace"],
+    "RedstoneFace": ["RedstoneFace"],
+    "RiftFace": ["RiftFace"],
+    "RippleFace": ["RippleFace"],
+    "SageFace": ["SageFace"],
+    "SentinelFace": ["SentinelFace"],
+    "ShadowFace": ["ShadowFace"],
+    "SlateFace": ["SlateFace"],
+    "SmileFace": ["BlueberryFace", "ChillFace" ,"SmileFace"],
+    "SnowFace": ["SnowFace"],
+    "SpectreFace": ["SpectreFace"],
+    "SplashFace": ["SplashFace"],
+    "SquashFace": ["SquashFace"],
+    "StreamFace": ["StreamFace"],
+    "StrongFace": ["StrongFace"],
+    "SunbeamFace": ["SunbeamFace"],
+    "SunshineFace": ["SunshineFace"],
+    "TrollFace": ["TrollFace"],
+    "VillagerFace": ["VillagerFace"],
+    "VioletFace": ["VioletFace"],
+    "ViridianFace": ["ViridianFace"],
+    "VoidFace": ["VoidFace"],
+    "WeaselFace": ["WeaselFace"],
+    "WilburFace": ["WilburFace"],
+    "WillowFace": ["WillowFace"],
+    "WraithFace": ["WraithFace"],
+    "ZipFace": ["ZipFace"]
 }
