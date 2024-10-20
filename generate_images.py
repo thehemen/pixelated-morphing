@@ -25,6 +25,7 @@ if __name__ == '__main__':
     parser.add_argument('--width', type=int, default=4, help='the width to align')
     parser.add_argument('--upscale_num', type=int, default=2, help='the number of image zooms')
     parser.add_argument('--n_jobs', type=int, default=4, help='the number of processes run in parallel')
+    parser.add_argument('--rect', default=False, action=argparse.BooleanOptionalAction, help='to use only rectangular images')
     parser.add_argument('--pixelate', default=False, action=argparse.BooleanOptionalAction, help='to pixelate an image by align width')
     args = parser.parse_args()
 
@@ -32,7 +33,7 @@ if __name__ == '__main__':
     make_dir(tmp_dir_name)
 
     imgs = read_images_and_labels('pixelated-characters.json', already_saved=True)
-    categoryList = CategoryList('categories.json')
+    categoryList = CategoryList('categories.json', args.rect)
 
     align_width = args.width * 2 ** args.upscale_num
 

@@ -7,7 +7,7 @@ class CategoryList:
         CategoryList implements a category list that makes it easier
         to choose from assets groupped into categories a random one.
     """
-    def __init__(self, filename):
+    def __init__(self, filename, only_rectangular_used):
         """CategoryList constructor.
 
         Fields:
@@ -15,7 +15,14 @@ class CategoryList:
         category_by_asset -- a dict of categories accessible by assets
         """
         with open(filename, 'r') as f:
-            self.assets_by_category = json.load(f)
+            json_dict = json.load(f)
+            self.assets_by_category = {}
+
+            for k, v in json_dict.items():
+                if only_rectangular_used and not v["rect"]:
+                    continue
+
+                self.assets_by_category[k] = v["images"]
 
         self.category_by_asset = {}
 
