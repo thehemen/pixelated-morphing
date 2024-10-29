@@ -15,6 +15,8 @@ if __name__ == '__main__':
         help='to recolor images')
     parser.add_argument('--swap_styles', default=False, action=argparse.BooleanOptionalAction,
         help='to swap image styles')
+    parser.add_argument('--frame_num', type=int, default=100, help='the number of frames')
+    parser.add_argument('--delay', type=int, default=10, help='the delay between frames in ms')
     parser.add_argument('--width', type=int, default=4, help='the width to align')
     args = parser.parse_args()
 
@@ -37,10 +39,10 @@ if __name__ == '__main__':
 
     imageMorphing = ImageMorphing(img1, img2, args.width)
 
-    for i in range(61):
-        alpha = i / 60.0
+    for i in range(args.frame_num + 1):
+        alpha = i / args.frame_num
         img = imageMorphing.get_morphed_image(alpha=alpha)
         cv2.imshow('Image', img)
-        cv2.waitKey(1)
+        cv2.waitKey(args.delay)
 
     cv2.destroyAllWindows()

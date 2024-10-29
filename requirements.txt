@@ -1,7 +1,11 @@
 tqdm
-glob
+matplotlib
 numpy
 joblib
 opencv-python
 scikit-image
 dearpygui
+albumentations
+torch
+torchvision
+torchinfo
